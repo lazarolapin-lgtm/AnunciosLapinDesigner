@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Anúncios Automáticos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        .upload-section { margin-bottom: 20px; }
+        input[type="file"], button { padding: 10px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #log { margin-top: 20px; padding: 10px; background: #e9ecef; border-radius: 4px; max-height: 300px; overflow-y: auto; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plataforma de Anúncios Automáticos</h1>
+        <p class="info">Carregue listas de contatos (TXT para emails, VCF para vCard). Simula envios a cada 10 horas. <strong>Use com responsabilidade!</strong></p>
+        
+        <div class="upload-section">
+            <label>Upload Lista de Emails (TXT, um email por linha):</label><br>
+            <input type="file" id="txtFile" accept=".txt">
+        </div>
+        
+        <div class="upload-section">
+            <label>Upload vCard (VCF):</label><br>
+            <input type="file" id="vcfFile" accept=".vcf">
+        </div>
+        
+        <div class="upload-section">
+            <label>Mensagem do Anúncio:</label><br>
+            <textarea id="message" rows="4" cols="50" placeholder="Digite o texto do anúncio...">Olá! Confira nossa nova oferta exclusiva.</textarea>
+        </div>
+        
+        <button onclick="carregarListas()">Carregar Listas</button>
+        <button onclick="iniciarEnvios()" id="startBtn">Iniciar Envios Automáticos (10h intervalo)</button>
+        <button onclick="pararEnvios()" id="stopBtn" disabled>Parar</button>
+        
+        <div id="status" class="status"></div>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        let emails = []; // Lista de emails
+        let intervalId = null;
+        const INTERVALO = 10 * 60 * 60 * 1000; // 10 horas em ms
+        let indexEnvio = 0;
+
+        function log(mensagem, tipo = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleString();
+            logDiv.innerHTML += `<p>[${timestamp}] [${tipo.toUpperCase()}] ${mensagem}</p>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            if (tipo === 'success' || tipo === 'error') {
+                alert(mensagem); // Notificação/alert de envio
+            }
+        }
+
+        function carregarListas() {
+            const txtFile = document.getElementById('txtFile').files[0];
+            const vcfFile = document.getElementById('vcfFile').files[0];
+            
+            emails = []; // Limpa lista
+            
+            if (txtFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const linhas = e.target.result.split('\n').map(l => l.trim()).filter(l => l.includes('@'));
+                    emails = emails.concat(linhas);
+                    log(`Carregados ${linhas.length} emails do TXT.`);
+                };
+                reader.readAsText(txtFile);
+            }
+            
+            if (vcfFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const conteudo = e.target.result;
+                    // Extrai emails de vCard (padrão: EMAIL;TYPE=...:...@...)
+                    const matches = conteudo.match(/EMAIL[^:\n]*:([^:\n\r]+)/g);
+                    if (matches) {
+                        const vcfEmails = matches.map(m => m.split(':')[1].trim()).filter(e => e.includes('@'));
+                        emails = emails.concat(vcfEmails);
+                        log(`Carregados ${vcfEmails.length} emails do vCard.`);
+                    } else {
+                        log('Nenhum email encontrado no vCard.', 'error');
+                    }
+                };
+                reader.readAsText(vcfFile);
+            }
+            
+            if (emails.length === 0) {
+                log('Nenhuma lista carregada. Forneça arquivos válidos.', 'error');
+                return;
+            }
+            
+            document.getElementById('status').innerHTML = `<span class="success">Total de contatos: ${emails.length}</span>`;
+        }
+
+        function simularEnvio(email, mensagem) {
+            // SIMULAÇÃO: Em produção, use fetch para API de email (ex: EmailJS)
+            // Exemplo: fetch('https://api.emailjs.com/...', { method: 'POST', body: { to: email, message: mensagem } });
+            console.log(`Enviando para ${email}: ${mensagem}`);
+            log(`Envio simulado para ${email} concluído.`, 'success');
+        }
+
+        function iniciarEnvios() {
+            if (emails.length === 0) {
+                log('Carregue as listas primeiro!', 'error');
+                return;
+            }
+            
+            const mensagem = document.getElementById('message').value;
+            if (!mensagem) {
+                log('Digite uma mensagem!', 'error');
+                return;
+            }
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            indexEnvio = 0;
+            
+            log('Envios automáticos iniciados. Próximo em 10 horas.');
+            
+            // Envio inicial imediato para o primeiro
+            simularEnvio(emails[0], mensagem);
+            indexEnvio++;
+            
+            intervalId = setInterval(() => {
+                if (indexEnvio < emails.length) {
+                    simularEnvio(emails[indexEnvio], mensagem);
+                    indexEnvio++;
+                } else {
+                    log('Todos os envios concluídos. Reiniciando ciclo.', 'info');
+                    indexEnvio = 0;
+                }
+            }, INTERVALO);
+        }
+
+        function pararEnvios() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            log('Envios pausados.', 'info');
+        }
+
+        // Exemplo de lista hardcoded para teste (remova em produção)
+        emails = ['exemplo1@email.com', 'exemplo2@email.com']; // Substitua por upload real
+    </script>
+</body>
+</html>
