@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapin Designer - Plataforma de Contato</title>
+    <style>
+        :root {
+            --primary-color: #007bff; /* Azul */
+            --secondary-color: #f8f9fa; /* Cinza claro */
+            --text-color: #333;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        header img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+
+        /* Estilos do Formulário */
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Cartão de Anúncios */
+        .ad-card {
+            background-color: #fff3cd; /* Amarelo claro para destaque */
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .ad-card h2 {
+            margin-top: 0;
+            color: #856404;
+        }
+
+        /* Chat Flutuante */
+        .chat-ball {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-decoration: none; /* Para ser um link */
+        }
+        
+        .chat-ball:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Estilos para o link do chat (ícone de balão) */
+        .chat-ball a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <img src="https://i.postimg.cc/DyHKQSH0/lapindesigner.png" alt="Lapin Designer Logo GIF">
+            <h1>Lapin Designer - Contato</h1>
+            <p>Preencha o formulário para entrar em contato ou enviar seu arquivo. (Funciona com Wi-Fi ou Dados Móveis)</p>
+        </header>
+
+        <form action="https://formspree.io/f/mqldaqwx" method="POST" enctype="multipart/form-data"> 
+            
+            <div class="form-group">
+                <label for="nome">Seu Nome:</label>
+                <input type="text" id="nome" name="Nome" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Seu E-mail (Para Resposta):</label>
+                <input type="email" id="email" name="Email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="mensagem">Mensagem/Detalhes do Pedido:</label>
+                <textarea id="mensagem" name="Mensagem" rows="5" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="anexo">Subir Arquivo (Foto, Documento, etc.):</label>
+                <input type="file" id="anexo" name="Anexo">
+            </div>
+
+            <div class="form-group">
+                <label for="horario">Horário Desejado para Contato (Formspree envia imediatamente):</label>
+                <input type="text" id="horario" name="Horario_Desejado" placeholder="Ex: 14:00 (Apenas para registro)">
+            </div>
+
+            <div class="form-group">
+                <label for="lista_emails">Lista de E-mails (.txt) - *LEIA ABAIXO*:</label>
+                <p style="font-size: 0.8em; color: red;">*AVISO*: O Formspree não usa este arquivo TXT para **envio em massa** automático. O arquivo será ANEXADO à sua notificação de submissão. Para e-mail marketing, use integrações (Mailchimp/ConvertKit).</p>
+                <input type="file" id="lista_emails" name="Lista_de_Emails">
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Enviar Formulário</button>
+            </div>
+        </form>
+        
+        ---
+
+        <div class="ad-card">
+            <h2>Anuncie Conosco!</h2>
+            <p>Espaço publicitário disponível por apenas **R$20,00 por mês**.</p>
+            <p>Alcance nosso público e cresça seu negócio.</p>
+            <a href="mailto:seu_email_para_anunciantes@exemplo.com" class="form-group button" style="text-decoration: none; color: white;">Fale Conosco sobre Anúncios</a>
+        </div>
+    </div>
+    
+    <a class="chat-ball" href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" title="Contatinus Chat">
+        <span>Contatinus</span>
+    </a>
+
+</body>
+</html>
