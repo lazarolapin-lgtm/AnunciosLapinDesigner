@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Contato - Lapin Designer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilo para a Logo GIF */
+        .logo {
+            margin-bottom: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Estilo do Formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Garante que padding não aumente a largura total */
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo para o Espaço de Anúncios */
+        .ads-space {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #ff9800;
+            border-radius: 8px;
+            background-color: #fffaf0;
+        }
+
+        .ads-space h3 {
+            color: #ff9800;
+            margin-top: 0;
+        }
+
+        /* Estilo para o Balão de Chat (Fixo no canto) */
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366; /* Cor verde do WhatsApp/Chat */
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            z-index: 1000; /* Garante que fique por cima de tudo */
+        }
+
+        .chat-button:hover {
+            background-color: #128c7e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img class="logo" src="https://i.postimg.cc/DyHKQSH0/lapindesigner.png" alt="Lapin Designer Logo">
+
+        <h2>Entre em Contato</h2>
+        <p>Use o formulário abaixo para enviar sua mensagem. Responderemos o mais breve possível!</p>
+
+        <form action="https://formspree.io/f/xbjnygzo" method="POST">
+            
+            <input type="hidden" name="_subject" value="Nova Mensagem de Contato do Site">
+
+            <input type="hidden" name="Horário do Envio" id="current-time">
+
+            <label for="name">Seu Nome:</label>
+            <input type="text" id="name" name="Nome" required>
+
+            <label for="email">Seu Email:</label>
+            <input type="email" id="email" name="_replyto" required>
+
+            <label for="message">Mensagem:</label>
+            <textarea id="message" name="Mensagem" rows="5" required></textarea>
+
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+
+        <div class="ads-space">
+            <h3>Espaço para Anunciantes</h3>
+            <p>Anuncie aqui por apenas **R$ 20,00 por mês** e alcance seus clientes!</p>
+            <p>Entre em contato pelo formulário acima para mais detalhes.</p>
+        </div>
+
+    </div>
+
+    <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Fale conosco no Google Chat">
+        💬
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const currentTimeInput = document.getElementById('current-time');
+
+            // Função para atualizar o campo oculto com a hora
+            form.addEventListener('submit', function(e) {
+                // Obtém a data e hora atuais
+                const now = new Date();
+                // Formato: DD/MM/AAAA HH:MM:SS
+                const formattedTime = now.toLocaleString('pt-BR', { 
+                    year: 'numeric', 
+                    month: 'numeric', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                });
+                
+                // Define o valor do campo oculto
+                currentTimeInput.value = formattedTime;
+                
+                // Nota: O Formspree envia este valor como um campo extra no e-mail.
+            });
+        });
+    </script>
+</body>
+</html>
