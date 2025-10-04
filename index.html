@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Sender - vCard Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .upload-area:hover {
+            background: #f0f0ff;
+            border-color: #764ba2;
+        }
+
+        .upload-area.dragover {
+            background: #e0e7ff;
+            border-color: #4338ca;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .contacts-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .contact-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .contact-number {
+            color: #666;
+            font-family: monospace;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .icon {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 SMS Sender Platform</h1>
+            <p>Envie SMS automaticamente usando contatos de vCard</p>
+        </div>
+
+        <div class="content">
+            <!-- Upload vCard -->
+            <div class="section">
+                <h2><span class="icon">📇</span> 1. Importar Contatos (vCard)</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="vcardFile" accept=".vcf,.vcard" multiple>
+                    <p style="font-size: 3em; margin-bottom: 10px;">📤</p>
+                    <p style="font-size: 1.2em; margin-bottom: 10px;">Clique ou arraste arquivos vCard aqui</p>
+                    <p style="color: #666;">Suporta múltiplos arquivos .vcf ou .vcard</p>
+                </div>
+                <div id="status1" class="status"></div>
+            </div>
+
+            <!-- Lista de Contatos -->
+            <div class="section" id="contactsSection" style="display: none;">
+                <h2><span class="icon">👥</span> Contatos Carregados</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalContacts">0</div>
+                        <div class="stat-label">Total de Contatos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="validNumbers">0</div>
+                        <div class="stat-label">Números Válidos</div>
+                    </div>
+                </div>
+                <div class="contacts-list" id="contactsList"></div>
+            </div>
+
+            <!-- Mensagem SMS -->
+            <div class="section">
+                <h2><span class="icon">✉️</span> 2. Compose sua Mensagem</h2>
+                <textarea id="messageText" placeholder="Digite sua mensagem aqui...&#x0a;&#x0a;Você pode usar variáveis:&#x0a;{nome} - Nome do contato&#x0a;{numero} - Número do telefone"></textarea>
+                <div style="margin-top: 10px; color: #666;">
+                    <small>Caracteres: <span id="charCount">0</span> | SMS: <span id="smsCount">0</span></small>
+                </div>
+            </div>
+
+            <!-- Envio -->
+            <div class="section">
+                <h2><span class="icon">🚀</span> 3. Enviar Mensagens</h2>
+                <p style="margin-bottom: 15px; color: #666;">
+                    ⚠️ Esta plataforma abrirá o aplicativo de SMS do seu dispositivo para cada contato. 
+                    Você precisará confirmar o envio manualmente em cada mensagem.
+                </p>
+                <button class="btn" id="sendBtn" disabled>Iniciar Envio Automático</button>
+                <button class="btn btn-secondary" id="clearBtn">Limpar Tudo</button>
+                
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+                <div id="status2" class="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let contacts = [];
+        let currentIndex = 0;
+        let isSending = false;
+
+        const uploadArea = document.getElementById('uploadArea');
+        const vcardFile = document.getElementById('vcardFile');
+        const contactsList = document.getElementById('contactsList');
+        const contactsSection = document.getElementById('contactsSection');
+        const messageText = document.getElementById('messageText');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const charCount = document.getElementById('charCount');
+        const smsCount = document.getElementById('smsCount');
+
+        // Upload handlers
+        uploadArea.addEventListener('click', () => vcardFile.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        vcardFile.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        messageText.addEventListener('input', () => {
+            const text = messageText.value;
+            const chars = text.length;
+            const sms = Math.ceil(chars / 160) || 0;
+            charCount.textContent = chars;
+            smsCount.textContent = sms;
+            updateSendButton();
+        });
+
+        sendBtn.addEventListener('click', startSending);
+        clearBtn.addEventListener('click', clearAll);
+
+        function handleFiles(files) {
+            const fileArray = Array.from(files);
+            let processed = 0;
+
+            fileArray.forEach(file => {
+                if (file.name.endsWith('.vcf') || file.name.endsWith('.vcard')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        parseVCard(e.target.result);
+                        processed++;
+                        if (processed === fileArray.length) {
+                            displayContacts();
+                            showStatus('status1', 'success', `✅ ${contacts.length} contatos carregados com sucesso!`);
+                        }
+                    };
+                    reader.readAsText(file);
+                } else {
+                    showStatus('status1', 'error', '❌ Por favor, selecione apenas arquivos vCard (.vcf ou .vcard)');
+                }
+            });
+        }
+
+        function parseVCard(vcardText) {
+            const vcards = vcardText.split('BEGIN:VCARD');
+            
+            vcards.forEach(vcard => {
+                if (!vcard.trim()) return;
+                
+                let name = '';
+                let phones = [];
+                
+                const lines = vcard.split('\n');
+                lines.forEach(line => {
+                    line = line.trim();
+                    
+                    if (line.startsWith('FN:')) {
+                        name = line.substring(3).trim();
+                    } else if (line.startsWith('TEL')) {
+                        let phone = line.split(':')[1];
+                        if (phone) {
+                            phone = phone.replace(/[^0-9+]/g, '');
+                            if (phone.length >= 10) {
+                                phones.push(phone);
+                            }
+                        }
+                    }
+                });
+                
+                if (name && phones.length > 0) {
+                    phones.forEach(phone => {
+                        contacts.push({ name, phone });
+                    });
+                }
+            });
+        }
+
+        function displayContacts() {
+            contactsList.innerHTML = '';
+            contactsSection.style.display = 'block';
+            
+            document.getElementById('totalContacts').textContent = contacts.length;
+            document.getElementById('validNumbers').textContent = contacts.length;
+            
+            contacts.forEach((contact, index) => {
+                const div = document.createElement('div');
+                div.className = 'contact-item';
+                div.innerHTML = `
+                    <span class="contact-name">${contact.name}</span>
+                    <span class="contact-number">${formatPhone(contact.phone)}</span>
+                `;
+                contactsList.appendChild(div);
+            });
+            
+            updateSendButton();
+        }
+
+        function formatPhone(phone) {
+            if (phone.length === 11) {
+                return `(${phone.substr(0,2)}) ${phone.substr(2,5)}-${phone.substr(7)}`;
+            } else if (phone.length === 10) {
+                return `(${phone.substr(0,2)}) ${phone.substr(2,4)}-${phone.substr(6)}`;
+            }
+            return phone;
+        }
+
+        function updateSendButton() {
+            sendBtn.disabled = contacts.length === 0 || messageText.value.trim() === '' || isSending;
+        }
+
+        function startSending() {
+            if (contacts.length === 0 || !messageText.value.trim()) return;
+            
+            isSending = true;
+            currentIndex = 0;
+            sendBtn.disabled = true;
+            document.getElementById('progressBar').style.display = 'block';
+            
+            sendNextMessage();
+        }
+
+        function sendNextMessage() {
+            if (currentIndex >= contacts.length) {
+                finishSending();
+                return;
+            }
+            
+            const contact = contacts[currentIndex];
+            const message = messageText.value
+                .replace(/{nome}/g, contact.name)
+                .replace(/{numero}/g, contact.phone);
+            
+            const progress = Math.round(((currentIndex + 1) / contacts.length) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+            
+            showStatus('status2', 'info', `📤 Enviando para ${contact.name} (${currentIndex + 1}/${contacts.length})...`);
+            
+            // Abre o app de SMS
+            const smsUrl = `sms:${contact.phone}?body=${encodeURIComponent(message)}`;
+            window.open(smsUrl, '_blank');
+            
+            currentIndex++;
+            
+            // Aguarda 10 horas (36000000 ms) antes de enviar a próxima mensagem
+            setTimeout(sendNextMessage, 36000000);
+        }
+
+        function finishSending() {
+            isSending = false;
+            showStatus('status2', 'success', `✅ Processo concluído! ${contacts.length} mensagens foram preparadas.`);
+            sendBtn.disabled = false;
+            updateSendButton();
+        }
+
+        function clearAll() {
+            contacts = [];
+            contactsList.innerHTML = '';
+            contactsSection.style.display = 'none';
+            messageText.value = '';
+            vcardFile.value = '';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            hideStatus('status1');
+            hideStatus('status2');
+            charCount.textContent = '0';
+            smsCount.textContent = '0';
+            updateSendButton();
+        }
+
+        function showStatus(id, type, message) {
+            const status = document.getElementById(id);
+            status.className = `status ${type}`;
+            status.textContent = message;
+            status.style.display = 'block';
+        }
+
+        function hideStatus(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
