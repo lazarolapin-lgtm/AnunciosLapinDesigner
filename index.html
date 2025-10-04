@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plataforma de Anúncios Automáticos</title>
+  <style>
+    body{font-family:Arial, sans-serif;margin:20px;background:#f4f4f4}
+    .container{max-width:900px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+    h1{text-align:center;color:#333}
+    textarea{width:100%;box-sizing:border-box}
+    input[type=file]{display:block;margin-bottom:8px}
+    button{padding:10px 14px;margin:6px;border-radius:6px;border:none;background:#007bff;color:#fff;cursor:pointer}
+    button[disabled]{background:#ccc;cursor:not-allowed}
+    #log{margin-top:16px;padding:10px;background:#e9ecef;border-radius:6px;max-height:300px;overflow:auto}
+    .small{font-size:0.9rem;color:#555}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Plataforma de Anúncios Automáticos</h1>
+
+    <p class="small">Carregue TXT (um email por linha) e/ou VCF. Para envio real, este front faz requisições ao seu backend em <code>/send</code>.</p>
+
+    <label>Upload Lista de Emails (TXT):</label>
+    <input type="file" id="txtFile" accept=".txt">
+
+    <label>Upload vCard (VCF):</label>
+    <input type="file" id="vcfFile" accept=".vcf">
+
+    <label>Mensagem do Anúncio:</label>
+    <textarea id="message" rows="5">Olá! Confira nossa nova oferta exclusiva.</textarea>
+
+    <div style="margin-top:10px">
+      <button id="loadBtn">Carregar Listas</button>
+      <button id="startBtn" disabled>Iniciar Envios Automáticos (10h intervalo)</button>
+      <button id="stopBtn" disabled>Parar</button>
+      <button id="testSendBtn" disabled>Testar 1 Envio</button>
+    </div>
+
+    <div id="status" style="margin-top:12px"></div>
+    <div id="log"></div>
+  </div>
+
+<script>
+  // Configurações
+  const INTERVALO = 10 * 60 * 60 * 1000; // 10 horas
+  let emails = [];
+  let intervalId = null;
+  let indexEnvio = 0;
+
+  const el = id => document.getElementById(id);
+  const logDiv = el('log');
+
+  function log(msg, tipo='info') {
+    const ts = new Date().toLocaleString();
+    logDiv.innerHTML += `<div>[${ts}] [${tipo.toUpperCase()}] ${msg}</div>`;
+    logDiv.scrollTop = logDiv.scrollHeight;
+    el('status').innerHTML = `<span class="small">${emails.length} contatos carregados — index ${indexEnvio}</span>`;
+  }
+
+  // Função utilitária para ler arquivo como texto (promessa)
+  function readFileAsTextAsync(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve('');
+      const r = new FileReader();
+      r.onerror = () => { r.abort(); reject(new Error('Erro lendo arquivo')); };
+      r.onload = () => resolve(r.result);
+      r.readAsText(file);
+    });
+  }
+
+  async function carregarListas() {
+    emails = [];
+    el('startBtn').disabled = true;
+    el('testSendBtn').disabled = true;
+
+    try {
+      const txtFile = el('txtFile').files[0];
+      const vcfFile = el('vcfFile').files[0];
+
+      // Leitura paralela
+      const [txtContent, vcfContent] = await Promise.all([
+        readFileAsTextAsync(txtFile),
+        readFileAsTextAsync(vcfFile)
+      ]);
+
+      if (txtContent) {
+        const linhas = txtContent.split(/\r?\n/).map(l => l.trim()).filter(l => l && /\S+@\S+\.\S+/.test(l));
+        emails = emails.concat(linhas);
+        log(`Carregados ${linhas.length} emails do TXT.`);
+      }
+
+      if (vcfContent) {
+        // busca padrões EMAIL:alguma@coisa.com ou EMAIL;TYPE=...:...
+        const re = /EMAIL[^:\n]*:([^\r\n]+)/gi;
+        let match, vcfEmails = [];
+        while ((match = re.exec(vcfContent)) !== null) {
+          const email = match[1].trim();
+          if (/\S+@\S+\.\S+/.test(email)) vcfEmails.push(email);
+        }
+        if (vcfEmails.length) {
+          emails = emails.concat(vcfEmails);
+          log(`Carregados ${vcfEmails.length} emails do VCF.`);
+        } else {
+          log('Nenhum email encontrado no VCF.', 'info');
+        }
+      }
+
+      // remove duplicados e filtra
+      emails = Array.from(new Set(emails.map(e => e.toLowerCase())));
+
+      if (emails.length === 0) {
+        log('Nenhum contato válido encontrado. Carregue arquivos com emails.', 'error');
+        el('status').innerHTML = `<span style="color:#721c24">Nenhum contato carregado</span>`;
+        return;
+      }
+
+      log(`Total final: ${emails.length} contatos.`);
+      el('startBtn').disabled = false;
+      el('testSendBtn').disabled = false;
+
+    } catch (err) {
+      console.error(err);
+      log('Erro ao carregar arquivos: ' + err.message, 'error');
+    }
+  }
+
+  // Faz POST ao backend para enviar email
+  async function enviarParaBackend(email, mensagem) {
+    try {
+      const resp = await fetch('/send', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ to: email, message: mensagem })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Erro no servidor');
+      log(`Enviado: ${email} — resposta: ${data.message || 'OK'}`, 'success');
+      return true;
+    } catch (err) {
+      log(`Falha envio ${email}: ${err.message}`, 'error');
+      return false;
+    }
+  }
+
+  async function iniciarEnvios() {
+    if (emails.length === 0) { log('Carregue as listas primeiro!', 'error'); return; }
+    const mensagem = el('message').value.trim();
+    if (!mensagem) { log('Digite uma mensagem!', 'error'); return; }
+
+    el('startBtn').disabled = true;
+    el('stopBtn').disabled = false;
+    indexEnvio = 0;
+    log('Envios automáticos iniciados. Primeiro envio imediato.');
+
+    // envio imediato para primeiro
+    await enviarParaBackend(emails[indexEnvio], mensagem);
+    indexEnvio++;
+
+    intervalId = setInterval(async () => {
+      if (indexEnvio < emails.length) {
+        await enviarParaBackend(emails[indexEnvio], mensagem);
+        indexEnvio++;
+      } else {
+        log('Todos os envios concluídos. Reiniciando ciclo.', 'info');
+        indexEnvio = 0;
+      }
+    }, INTERVALO);
+  }
+
+  function pararEnvios() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = null;
+    el('startBtn').disabled = false;
+    el('stopBtn').disabled = true;
+    log('Envios pausados.', 'info');
+  }
+
+  // Botão Testar 1 envio (útil para testar credenciais/integração)
+  async function testarUmEnvio() {
+    if (emails.length === 0) { log('Carregue as listas primeiro!', 'error'); return; }
+    const mensagem = el('message').value.trim();
+    if (!mensagem) { log('Digite uma mensagem!', 'error'); return; }
+    const sucesso = await enviarParaBackend(emails[0], mensagem);
+    if (sucesso) log('Teste de envio concluído.', 'success');
+  }
+
+  // Event listeners
+  el('loadBtn').addEventListener('click', carregarListas);
+  el('startBtn').addEventListener('click', iniciarEnvios);
+  el('stopBtn').addEventListener('click', pararEnvios);
+  el('testSendBtn').addEventListener('click', testarUmEnvio);
+
+  // Observe: front não controla pool/limites — backend deve implementar rate limit/pooling.
+</script>
+</body>
+</html>
