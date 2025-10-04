@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapin Designer - Automação de Anúncios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-upload {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo-placeholder {
+            font-size: 60px;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover .logo-placeholder {
+            transform: scale(1.1);
+        }
+
+        #logoInput {
+            display: none;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="time"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
+        }
+
+        .status-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .status-item h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .status-item p {
+            opacity: 0.9;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left: 5px solid #38ef7d;
+        }
+
+        .notification.error {
+            border-left: 5px solid #f5576c;
+        }
+
+        .payment-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .price {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .features {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-item:before {
+            content: "✓";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .campaign-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .campaign-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .campaign-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #38ef7d;
+            color: white;
+        }
+
+        .status-scheduled {
+            background: #ffd93d;
+            color: #333;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo logo-upload" onclick="document.getElementById('logoInput').click()">
+                <img id="logoImage" src="" alt="Logo" style="display: none;">
+                <div id="logoPlaceholder" class="logo-placeholder">🐰</div>
+            </div>
+            <input type="file" id="logoInput" accept="image/gif,image/png,image/jpeg,image/jpg,image/webp">
+            <p class="upload-hint">📸 Clique na logo para fazer upload (GIF, PNG, JPG)</p>
+            <h1>LAPIN DESIGNER</h1>
+            <p class="subtitle">Plataforma Automática de Anúncios</p>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-grid">
+                <div class="status-item">
+                    <h3 id="totalSent">0</h3>
+                    <p>Anúncios Enviados</p>
+                </div>
+                <div class="status-item">
+                    <h3 id="totalScheduled">0</h3>
+                    <p>Agendados</p>
+                </div>
+                <div class="status-item">
+                    <h3 id="totalContacts">0</h3>
+                    <p>Contatos Carregados</p>
+                </div>
+                <div class="status-item">
+                    <h3 id="systemStatus">🟢</h3>
+                    <p>Sistema Ativo</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Campanhas VCard -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📱</div>
+                    <h2 class="card-title">Campanhas VCard</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload VCard (.vcf)</label>
+                    <input type="file" id="vcardFile" accept=".vcf">
+                    <div class="file-info" id="vcardInfo">Nenhum arquivo selecionado</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mensagem do Anúncio</label>
+                    <textarea id="vcardMessage" placeholder="Digite sua mensagem de anúncio aqui..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Horário de Envio</label>
+                    <input type="time" id="vcardTime" value="09:00">
+                </div>
+
+                <button class="btn btn-primary" onclick="scheduleVCardCampaign()">
+                    Agendar Campanha VCard
+                </button>
+
+                <div class="campaign-list" id="vcardCampaigns"></div>
+            </div>
+
+            <!-- Campanhas Email -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📧</div>
+                    <h2 class="card-title">Campanhas Gmail</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload Lista de Emails (.txt)</label>
+                    <input type="file" id="emailFile" accept=".txt">
+                    <div class="file-info" id="emailInfo">Nenhum arquivo selecionado</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Assunto do Email</label>
+                    <input type="text" id="emailSubject" placeholder="Assunto do seu anúncio">
+                </div>
+
+                <div class="form-group">
+                    <label>Mensagem do Anúncio</label>
+                    <textarea id="emailMessage" placeholder="Digite o conteúdo do email aqui..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Horário de Envio</label>
+                    <input type="time" id="emailTime" value="10:00">
+                </div>
+
+                <button class="btn btn-primary" onclick="scheduleEmailCampaign()">
+                    Agendar Campanha Email
+                </button>
+
+                <div class="campaign-list" id="emailCampaigns"></div>
+            </div>
+        </div>
+
+        <!-- Seção de Pagamento -->
+        <div class="payment-section">
+            <h2>🌟 Hospedagem Premium de Anúncios</h2>
+            <div class="price-box">
+                <h3>Plano Mensal</h3>
+                <div class="price">R$ 8,00</div>
+                <p>por mês</p>
+                <div class="features">
+                    <div class="feature-item">Anúncios Ilimitados</div>
+                    <div class="feature-item">Envio Automático 24/7</div>
+                    <div class="feature-item">Suporte Técnico</div>
+                    <div class="feature-item">Dashboard Completo</div>
+                    <div class="feature-item">Notificações em Tempo Real</div>
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="processPayment()">
+                💳 Assinar com PayPal
+            </button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let vcardContacts = [];
+        let emailContacts = [];
+        let vcardCampaigns = [];
+        let emailCampaigns = [];
+        let totalSent = 0;
+
+        // Upload da Logo (GIF, PNG, JPG)
+        document.getElementById('logoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const logoImg = document.getElementById('logoImage');
+                    const logoPlaceholder = document.getElementById('logoPlaceholder');
+                    
+                    logoImg.src = event.target.result;
+                    logoImg.style.display = 'block';
+                    logoPlaceholder.style.display = 'none';
+                    
+                    showNotification('Logo atualizada com sucesso! 🎨', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Carregar VCard
+        document.getElementById('vcardFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    vcardContacts = parseVCard(content);
+                    document.getElementById('vcardInfo').textContent = 
+                        `${vcardContacts.length} contatos carregados`;
+                    updateStats();
+                    showNotification('VCard carregado com sucesso!', 'success');
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Carregar Email List
+        document.getElementById('emailFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    emailContacts = content.split('\n').filter(e => e.trim() && e.includes('@'));
+                    document.getElementById('emailInfo').textContent = 
+                        `${emailContacts.length} emails carregados`;
+                    updateStats();
+                    showNotification('Lista de emails carregada com sucesso!', 'success');
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function parseVCard(content) {
+            const contacts = [];
+            const vcards = content.split('END:VCARD');
+            vcards.forEach(vcard => {
+                if (vcard.includes('BEGIN:VCARD')) {
+                    const telMatch = vcard.match(/TEL[^:]*:([^\n]+)/);
+                    const nameMatch = vcard.match(/FN:([^\n]+)/);
+                    if (telMatch) {
+                        contacts.push({
+                            name: nameMatch ? nameMatch[1].trim() : 'Sem nome',
+                            phone: telMatch[1].trim()
+                        });
+                    }
+                }
+            });
+            return contacts;
+        }
+
+        function scheduleVCardCampaign() {
+            const message = document.getElementById('vcardMessage').value;
+            const time = document.getElementById('vcardTime').value;
+
+            if (!message || vcardContacts.length === 0) {
+                showNotification('Preencha todos os campos e carregue os contatos!', 'error');
+                return;
+            }
+
+            const campaign = {
+                id: Date.now(),
+                type: 'vcard',
+                message: message,
+                time: time,
+                contacts: vcardContacts.length,
+                status: 'scheduled',
+                createdAt: new Date().toLocaleString()
+            };
+
+            vcardCampaigns.push(campaign);
+            renderCampaigns();
+            startAutomation(campaign);
+            showNotification('Campanha VCard agendada com sucesso!', 'success');
+            
+            document.getElementById('vcardMessage').value = '';
+        }
+
+        function scheduleEmailCampaign() {
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            const time = document.getElementById('emailTime').value;
+
+            if (!subject || !message || emailContacts.length === 0) {
+                showNotification('Preencha todos os campos e carregue os emails!', 'error');
+                return;
+            }
+
+            const campaign = {
+                id: Date.now(),
+                type: 'email',
+                subject: subject,
+                message: message,
+                time: time,
+                contacts: emailContacts.length,
+                status: 'scheduled',
+                createdAt: new Date().toLocaleString()
+            };
+
+            emailCampaigns.push(campaign);
+            renderCampaigns();
+            startAutomation(campaign);
+            showNotification('Campanha Email agendada com sucesso!', 'success');
+            
+            document.getElementById('emailSubject').value = '';
+            document.getElementById('emailMessage').value = '';
+        }
+
+        function startAutomation(campaign) {
+            const [hours, minutes] = campaign.time.split(':');
+            const now = new Date();
+            const scheduledTime = new Date(now);
+            scheduledTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+            if (scheduledTime < now) {
+                scheduledTime.setDate(scheduledTime.getDate() + 1);
+            }
+
+            const delay = scheduledTime - now;
+
+            setTimeout(() => {
+                sendCampaign(campaign);
+            }, delay);
+        }
+
+        function sendCampaign(campaign) {
+            campaign.status = 'active';
+            renderCampaigns();
+            showNotification(`Enviando campanha ${campaign.type}...`, 'success');
+
+            // Simulação de envio
+            let sent = 0;
+            const interval = setInterval(() => {
+                sent++;
+                totalSent++;
+                updateStats();
+
+                if (sent >= campaign.contacts) {
+                    clearInterval(interval);
+                    campaign.status = 'completed';
+                    renderCampaigns();
+                    showNotification(`Campanha ${campaign.type} concluída! ${sent} anúncios enviados.`, 'success');
+                }
+            }, 2000);
+        }
+
+        function renderCampaigns() {
+            const vcardList = document.getElementById('vcardCampaigns');
+            const emailList = document.getElementById('emailCampaigns');
+
+            vcardList.innerHTML = vcardCampaigns.map(c => `
+                <div class="campaign-item">
+                    <div>
+                        <strong>${c.contacts} contatos</strong><br>
+                        <small>Horário: ${c.time}</small>
+                    </div>
+                    <span class="campaign-status status-${c.status === 'active' ? 'active' : 'scheduled'}">
+                        ${c.status === 'active' ? 'ATIVO' : 'AGENDADO'}
+                    </span>
+                </div>
+            `).join('');
+
+            emailList.innerHTML = emailCampaigns.map(c => `
+                <div class="campaign-item">
+                    <div>
+                        <strong>${c.subject}</strong><br>
+                        <small>${c.contacts} emails - ${c.time}</small>
+                    </div>
+                    <span class="campaign-status status-${c.status === 'active' ? 'active' : 'scheduled'}">
+                        ${c.status === 'active' ? 'ATIVO' : 'AGENDADO'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalSent').textContent = totalSent;
+            document.getElementById('totalScheduled').textContent = 
+                vcardCampaigns.length + emailCampaigns.length;
+            document.getElementById('totalContacts').textContent = 
+                vcardContacts.length + emailContacts.length;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        function processPayment() {
+            // URL do PayPal configurada para receber pagamentos
+            const paypalEmail = 'seu-email@paypal.com'; // SUBSTITUA pelo seu email PayPal
+            const amount = '8.00';
+            const currency = 'BRL';
+            
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${paypalEmail}&item_name=Hospedagem%20Anuncios%20Lapin%20Designer&amount=${amount}&currency_code=${currency}&return=https://seusite.com/sucesso&cancel_return=https://seusite.com/cancelado`;
+            
+            window.open(paypalUrl, '_blank');
+            showNotification('Redirecionando para o PayPal...', 'success');
+        }
+
+        // Inicializar sistema
+        updateStats();
+        setInterval(updateStats, 5000);
+    </script>
+</body>
+</html>
