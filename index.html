@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapin Designer - Campanhas de Marketing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lordicon/4.1.0/lordicon.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header e Menu */
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(255,255,255,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        nav {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Seções principais */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
+            border: 1px solid #2d2d2d;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #00ff88;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .campaign-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .campaign-panel {
+            background: #0d0d0d;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #2d2d2d;
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #00ccff;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff88;
+            font-weight: 500;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #2d2d2d;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .status-box {
+            background: #0d0d0d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #00ff88;
+        }
+
+        .status-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Seção de anúncios */
+        .pricing-box {
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #00ff88;
+        }
+
+        .price {
+            font-size: 3em;
+            color: #00ff88;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .price span {
+            font-size: 0.5em;
+            color: #fff;
+        }
+
+        /* Chat bubble */
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.5);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(0, 255, 136, 0.7);
+        }
+
+        .chat-bubble svg {
+            width: 30px;
+            height: 30px;
+            fill: #000;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.5);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1001;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-text {
+            background: #0d0d0d;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00ccff;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 968px) {
+            .campaign-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logo {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Lapin Designer</h1>
+            <nav>
+                <ul>
+                    <li><a href="#campanha">📱 Campanha SMS/Email</a></li>
+                    <li><a href="#anunciar">💰 Anunciar</a></li>
+                    <li><a href="#status">📊 Status</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <!-- Seção de Campanha -->
+        <section id="campanha" class="section">
+            <h2 class="section-title">📢 Nova Campanha de Marketing</h2>
+            
+            <div class="info-text">
+                ℹ️ Configure sua campanha de SMS e E-mail. O sistema enviará 1 SMS por hora e 1 e-mail por hora para cada contato automaticamente após iniciar.
+            </div>
+
+            <div class="campaign-grid">
+                <!-- Painel SMS -->
+                <div class="campaign-panel">
+                    <h3 class="panel-title">📱 Campanha SMS</h3>
+                    
+                    <div class="form-group">
+                        <label for="vcardFile">Arquivo vCard (.vcf):</label>
+                        <input type="file" id="vcardFile" accept=".vcf,.vcard" onchange="handleVcardUpload(event)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smsMessage">Mensagem SMS:</label>
+                        <textarea id="smsMessage" placeholder="Digite sua mensagem de SMS aqui...">Olá! Confira nossas promoções especiais. Lapin Designer - Seu parceiro em marketing digital.</textarea>
+                    </div>
+
+                    <div class="status-box">
+                        <strong>Status SMS:</strong>
+                        <div class="status-item">
+                            <span id="smsCount">Números carregados: 0</span>
+                        </div>
+                        <div class="status-item">
+                            <span id="smsSent">Enviados: 0</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-full" onclick="startSmsCampaign()">Iniciar Campanha SMS</button>
+                </div>
+
+                <!-- Painel E-mail -->
+                <div class="campaign-panel">
+                    <h3 class="panel-title">📧 Campanha E-mail</h3>
+                    
+                    <div class="form-group">
+                        <label for="emailFile">Arquivo TXT com e-mails:</label>
+                        <input type="file" id="emailFile" accept=".txt" onchange="handleEmailFileUpload(event)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bannerUrl">URL do Banner GIF:</label>
+                        <input type="url" id="bannerUrl" placeholder="https://exemplo.com/banner.gif">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailMessage">Mensagem E-mail:</label>
+                        <textarea id="emailMessage" placeholder="Digite sua mensagem de e-mail aqui...">Olá!
+
+Confira nossas ofertas exclusivas e promoções especiais.
+
+Lapin Designer - Transformando ideias em resultados.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formspreeUrl">URL Formspree.io:</label>
+                        <input type="url" id="formspreeUrl" placeholder="https://formspree.io/f/seu-id">
+                    </div>
+
+                    <div class="status-box">
+                        <strong>Status E-mail:</strong>
+                        <div class="status-item">
+                            <span id="emailCount">E-mails carregados: 0</span>
+                        </div>
+                        <div class="status-item">
+                            <span id="emailSent">Enviados: 0</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-full" onclick="startEmailCampaign()">Iniciar Campanha E-mail</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Anunciar -->
+        <section id="anunciar" class="section">
+            <h2 class="section-title">💰 Anuncie Conosco</h2>
+            
+            <div class="pricing-box">
+                <h3>Plano Mensal de Anúncios</h3>
+                <div class="price">R$ 20,00<span>/mês</span></div>
+                <p style="margin: 20px 0; font-size: 1.1em;">Alcance milhares de potenciais clientes com campanhas automatizadas de SMS e E-mail</p>
+                
+                <div style="text-align: left; margin: 30px 0;">
+                    <h4 style="color: #00ff88; margin-bottom: 15px;">✨ Benefícios inclusos:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0;">✓ Envio automatizado de SMS</li>
+                        <li style="padding: 8px 0;">✓ Envio automatizado de E-mails</li>
+                        <li style="padding: 8px 0;">✓ Upload de listas de contatos</li>
+                        <li style="padding: 8px 0;">✓ Banner personalizado em e-mails</li>
+                        <li style="padding: 8px 0;">✓ Relatórios de envio</li>
+                        <li style="padding: 8px 0;">✓ Suporte via chat</li>
+                    </ul>
+                </div>
+
+                <button class="btn" onclick="contratar()">Contratar Agora</button>
+            </div>
+        </section>
+
+        <!-- Seção de Status -->
+        <section id="status" class="section">
+            <h2 class="section-title">📊 Status das Campanhas</h2>
+            
+            <div class="status-box">
+                <h3 style="color: #00ff88; margin-bottom: 15px;">Campanhas Ativas</h3>
+                <div id="campaignStatus">
+                    <p style="color: #888;">Nenhuma campanha ativa no momento.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Chat Bubble -->
+    <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-bubble" title="Chat de Suporte">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        </svg>
+    </a>
+
+    <!-- Notificação -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let vcardContacts = [];
+        let emailList = [];
+        let smsInterval = null;
+        let emailInterval = null;
+        let smsSentCount = 0;
+        let emailSentCount = 0;
+
+        function showNotification(message) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.style.display = 'block';
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 3000);
+        }
+
+        function handleVcardUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const phones = content.match(/TEL[^:]*:([^\n\r]+)/gi);
+                
+                if (phones) {
+                    vcardContacts = phones.map(p => p.split(':')[1].trim());
+                    document.getElementById('smsCount').textContent = `Números carregados: ${vcardContacts.length}`;
+                    showNotification(`${vcardContacts.length} números carregados com sucesso!`);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function handleEmailFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                emailList = content.split('\n').map(e => e.trim()).filter(e => e.includes('@'));
+                document.getElementById('emailCount').textContent = `E-mails carregados: ${emailList.length}`;
+                showNotification(`${emailList.length} e-mails carregados com sucesso!`);
+            };
+            reader.readAsText(file);
+        }
+
+        function startSmsCampaign() {
+            if (vcardContacts.length === 0) {
+                showNotification('Por favor, carregue um arquivo vCard primeiro!');
+                return;
+            }
+
+            const message = document.getElementById('smsMessage').value;
+            if (!message.trim()) {
+                showNotification('Por favor, digite uma mensagem SMS!');
+                return;
+            }
+
+            if (smsInterval) {
+                clearInterval(smsInterval);
+            }
+
+            smsSentCount = 0;
+            let currentIndex = 0;
+
+            showNotification('Campanha SMS iniciada! Enviando 1 SMS por hora...');
+            updateCampaignStatus();
+
+            // Enviar primeiro SMS imediatamente
+            sendSms(vcardContacts[currentIndex], message);
+            currentIndex++;
+            smsSentCount++;
+
+            // Continuar enviando a cada hora
+            smsInterval = setInterval(() => {
+                if (currentIndex < vcardContacts.length) {
+                    sendSms(vcardContacts[currentIndex], message);
+                    currentIndex++;
+                    smsSentCount++;
+                    document.getElementById('smsSent').textContent = `Enviados: ${smsSentCount}`;
+                    showNotification(`SMS ${smsSentCount} de ${vcardContacts.length} enviado!`);
+                } else {
+                    clearInterval(smsInterval);
+                    showNotification('Campanha SMS concluída!');
+                }
+            }, 3600000); // 1 hora = 3600000ms
+        }
+
+        function sendSms(phone, message) {
+            // Integração com torpedogratis.org ou similar
+            const smsUrl = `https://www.torpedogratis.org/send.php?phone=${encodeURIComponent(phone)}&message=${encodeURIComponent(message)}`;
+            console.log('Enviando SMS para:', phone);
+            // Aqui você implementaria a chamada real à API
+        }
+
+        function startEmailCampaign() {
+            if (emailList.length === 0) {
+                showNotification('Por favor, carregue um arquivo TXT com e-mails!');
+                return;
+            }
+
+            const message = document.getElementById('emailMessage').value;
+            const bannerUrl = document.getElementById('bannerUrl').value;
+            const formspreeUrl = document.getElementById('formspreeUrl').value;
+
+            if (!message.trim()) {
+                showNotification('Por favor, digite uma mensagem de e-mail!');
+                return;
+            }
+
+            if (!formspreeUrl.trim()) {
+                showNotification('Por favor, informe a URL do Formspree.io!');
+                return;
+            }
+
+            if (emailInterval) {
+                clearInterval(emailInterval);
+            }
+
+            emailSentCount = 0;
+            let currentIndex = 0;
+
+            showNotification('Campanha E-mail iniciada! Enviando 1 e-mail por hora...');
+            updateCampaignStatus();
+
+            // Enviar primeiro e-mail imediatamente
+            sendEmail(emailList[currentIndex], message, bannerUrl, formspreeUrl);
+            currentIndex++;
+            emailSentCount++;
+
+            // Continuar enviando a cada hora
+            emailInterval = setInterval(() => {
+                if (currentIndex < emailList.length) {
+                    sendEmail(emailList[currentIndex], message, bannerUrl, formspreeUrl);
+                    currentIndex++;
+                    emailSentCount++;
+                    document.getElementById('emailSent').textContent = `Enviados: ${emailSentCount}`;
+                    showNotification(`E-mail ${emailSentCount} de ${emailList.length} enviado!`);
+                } else {
+                    clearInterval(emailInterval);
+                    showNotification('Campanha E-mail concluída!');
+                }
+            }, 3600000); // 1 hora
+        }
+
+        async function sendEmail(email, message, bannerUrl, formspreeUrl) {
+            const emailBody = `
+                ${bannerUrl ? `<img src="${bannerUrl}" alt="Banner" style="max-width: 100%;">` : ''}
+                <div style="margin-top: 20px;">
+                    ${message.replace(/\n/g, '<br>')}
+                </div>
+            `;
+
+            try {
+                const response = await fetch(formspreeUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        message: emailBody
+                    })
+                });
+
+                console.log('E-mail enviado para:', email);
+            } catch (error) {
+                console.error('Erro ao enviar e-mail:', error);
+            }
+        }
+
+        function updateCampaignStatus() {
+            const statusDiv = document.getElementById('campaignStatus');
+            const now = new Date().toLocaleString('pt-BR');
+            
+            let html = '';
+            
+            if (smsInterval) {
+                html += `<div class="status-item">📱 SMS: ${smsSentCount}/${vcardContacts.length} enviados - Iniciado em ${now}</div>`;
+            }
+            
+            if (emailInterval) {
+                html += `<div class="status-item">📧 E-mail: ${emailSentCount}/${emailList.length} enviados - Iniciado em ${now}</div>`;
+            }
+
+            if (html) {
+                statusDiv.innerHTML = html;
+            }
+        }
+
+        function contratar() {
+            showNotification('Redirecionando para pagamento...');
+            // Aqui você implementaria a integração com sistema de pagamento
+            setTimeout(() => {
+                alert('Entre em contato pelo chat para contratar o plano mensal de R$20,00');
+            }, 1000);
+        }
+
+        // Atualizar status a cada minuto
+        setInterval(updateCampaignStatus, 60000);
+    </script>
+</body>
+</html>
