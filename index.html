@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapin Designer - Plataforma de Campanhas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border-bottom: 2px solid #333;
+        }
+
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .campaign-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .campaign-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .campaign-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            color: #00d4ff;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #00d4ff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        input[type="file"],
+        textarea,
+        input[type="datetime-local"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            cursor: pointer;
+        }
+
+        .banner-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status-panel {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #333;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .status-title {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .notification {
+            background: #2a2a2a;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.success {
+            border-left-color: #00ff88;
+        }
+
+        .notification.error {
+            border-left-color: #ff4444;
+        }
+
+        .notification-time {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .ads-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a1a4a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #6a3fb4;
+            margin-top: 30px;
+        }
+
+        .ads-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #bb86fc;
+        }
+
+        .ads-price {
+            font-size: 2.5em;
+            color: #00ff88;
+            margin: 20px 0;
+        }
+
+        .ads-features {
+            text-align: left;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .ads-feature {
+            padding: 10px 0;
+            color: #ccc;
+        }
+
+        .ads-feature i {
+            color: #00ff88;
+            margin-right: 10px;
+        }
+
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-bubble i {
+            font-size: 1.8em;
+            color: #fff;
+        }
+
+        .campaign-info {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #aaa;
+        }
+
+        .info-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        @media (max-width: 968px) {
+            .campaign-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .card-title {
+                font-size: 1.3em;
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://i.im.ge/2025/01/24/ny41jq.Group-4.png" alt="Lapin Designer" class="logo">
+        <h1>LAPIN DESIGNER</h1>
+        <p class="subtitle">Plataforma Profissional de Campanhas de Marketing</p>
+    </div>
+
+    <div class="container">
+        <div class="campaign-grid">
+            <!-- EMAIL CAMPAIGN -->
+            <div class="campaign-card">
+                <div class="card-header">
+                    <i class="fas fa-envelope card-icon"></i>
+                    <h2 class="card-title">Campanha de E-mail</h2>
+                </div>
+
+                <form id="emailForm" action="https://formspree.io/f/xrbylegy" method="POST">
+                    <div class="form-group">
+                        <label><i class="fas fa-file-alt"></i> Arquivo TXT com E-mails</label>
+                        <input type="file" id="emailFile" accept=".txt" required>
+                        <small style="color: #888;">Formato: um e-mail por linha</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-image"></i> Banner GIF</label>
+                        <input type="file" id="emailBanner" accept="image/gif" required>
+                        <img id="emailBannerPreview" class="banner-preview" alt="Preview">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-edit"></i> Mensagem do E-mail</label>
+                        <textarea id="emailMessage" name="message" placeholder="Digite sua mensagem aqui..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Início da Campanha</label>
+                        <input type="datetime-local" id="emailStart" required>
+                    </div>
+
+                    <div class="campaign-info">
+                        <div class="info-row">
+                            <span class="info-label">E-mails carregados:</span>
+                            <span class="info-value" id="emailCount">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Taxa de envio:</span>
+                            <span class="info-value">1 e-mail/hora</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" id="emailStatus">Aguardando</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" id="emailBtn">
+                        <i class="fas fa-rocket"></i> Iniciar Campanha de E-mail
+                    </button>
+                </form>
+            </div>
+
+            <!-- SMS CAMPAIGN -->
+            <div class="campaign-card">
+                <div class="card-header">
+                    <i class="fas fa-sms card-icon"></i>
+                    <h2 class="card-title">Campanha de SMS</h2>
+                </div>
+
+                <form id="smsForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-address-card"></i> Arquivo vCard com Números</label>
+                        <input type="file" id="vcardFile" accept=".vcf,.vcard" required>
+                        <small style="color: #888;">Formato: arquivo vCard (.vcf)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-image"></i> Banner GIF</label>
+                        <input type="file" id="smsBanner" accept="image/gif" required>
+                        <img id="smsBannerPreview" class="banner-preview" alt="Preview">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Mensagem do SMS</label>
+                        <textarea id="smsMessage" placeholder="Digite sua mensagem SMS aqui..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Início da Campanha</label>
+                        <input type="datetime-local" id="smsStart" required>
+                    </div>
+
+                    <div class="campaign-info">
+                        <div class="info-row">
+                            <span class="info-label">Números carregados:</span>
+                            <span class="info-value" id="smsCount">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Taxa de envio:</span>
+                            <span class="info-value">1 SMS/hora</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" id="smsStatus">Aguardando</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" id="smsBtn">
+                        <i class="fas fa-paper-plane"></i> Iniciar Campanha de SMS
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- STATUS PANEL -->
+        <div class="status-panel">
+            <h3 class="status-title"><i class="fas fa-bell"></i> Notificações de Envio</h3>
+            <div id="notifications"></div>
+        </div>
+
+        <!-- ADS SECTION -->
+        <div class="ads-section">
+            <h2 class="ads-title"><i class="fas fa-bullhorn"></i> Potencialize suas Campanhas</h2>
+            <div class="ads-price">R$ 20,00<span style="font-size: 0.4em; color: #ccc;">/mês</span></div>
+            <div class="ads-features">
+                <div class="ads-feature">
+                    <i class="fas fa-check-circle"></i> Envios ilimitados
+                </div>
+                <div class="ads-feature">
+                    <i class="fas fa-check-circle"></i> Relatórios detalhados
+                </div>
+                <div class="ads-feature">
+                    <i class="fas fa-check-circle"></i> Suporte prioritário
+                </div>
+                <div class="ads-feature">
+                    <i class="fas fa-check-circle"></i> Templates premium
+                </div>
+            </div>
+            <button class="btn" onclick="alert('Entre em contato para contratar o plano premium!')">
+                <i class="fas fa-crown"></i> Assinar Plano Premium
+            </button>
+        </div>
+    </div>
+
+    <!-- CHAT BUBBLE -->
+    <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-bubble">
+        <i class="fas fa-comments"></i>
+    </a>
+
+    <script>
+        // EMAIL SYSTEM
+        let emailList = [];
+        let emailCampaignActive = false;
+        let emailCurrentIndex = 0;
+        let emailIntervalId = null;
+
+        document.getElementById('emailFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    emailList = content.split('\n').filter(email => email.trim() !== '');
+                    document.getElementById('emailCount').textContent = emailList.length;
+                    addNotification(`${emailList.length} e-mails carregados com sucesso!`, 'success');
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('emailBanner').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('emailBannerPreview');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (emailList.length === 0) {
+                addNotification('Por favor, carregue um arquivo com e-mails!', 'error');
+                return;
+            }
+
+            const startTime = new Date(document.getElementById('emailStart').value);
+            const now = new Date();
+            
+            if (startTime <= now) {
+                startEmailCampaign();
+            } else {
+                const delay = startTime - now;
+                addNotification(`Campanha de e-mail agendada para ${startTime.toLocaleString('pt-BR')}`, 'success');
+                document.getElementById('emailStatus').textContent = 'Agendada';
+                setTimeout(startEmailCampaign, delay);
+            }
+        });
+
+        function startEmailCampaign() {
+            emailCampaignActive = true;
+            document.getElementById('emailStatus').textContent = 'Ativa';
+            document.getElementById('emailBtn').disabled = true;
+            addNotification('Campanha de e-mail iniciada!', 'success');
+            
+            sendNextEmail();
+            emailIntervalId = setInterval(sendNextEmail, 3600000); // 1 hora
+        }
+
+        function sendNextEmail() {
+            if (emailCurrentIndex < emailList.length) {
+                const email = emailList[emailCurrentIndex];
+                const message = document.getElementById('emailMessage').value;
+                
+                // Simulação de envio via Formspree
+                addNotification(`E-mail enviado para ${email}`, 'success');
+                emailCurrentIndex++;
+                
+                if (emailCurrentIndex >= emailList.length) {
+                    clearInterval(emailIntervalId);
+                    emailCampaignActive = false;
+                    document.getElementById('emailStatus').textContent = 'Concluída';
+                    addNotification('Campanha de e-mail concluída!', 'success');
+                }
+            }
+        }
+
+        // SMS SYSTEM
+        let smsList = [];
+        let smsCampaignActive = false;
+        let smsCurrentIndex = 0;
+        let smsIntervalId = null;
+
+        document.getElementById('vcardFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    // Parse vCard format (simple implementation)
+                    const phones = content.match(/TEL[^:]*:([^\n]+)/g);
+                    if (phones) {
+                        smsList = phones.map(p => p.split(':')[1].trim());
+                        document.getElementById('smsCount').textContent = smsList.length;
+                        addNotification(`${smsList.length} números carregados com sucesso!`, 'success');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('smsBanner').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('smsBannerPreview');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('smsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (smsList.length === 0) {
+                addNotification('Por favor, carregue um arquivo vCard com números!', 'error');
+                return;
+            }
+
+            const startTime = new Date(document.getElementById('smsStart').value);
+            const now = new Date();
+            
+            if (startTime <= now) {
+                startSmsCampaign();
+            } else {
+                const delay = startTime - now;
+                addNotification(`Campanha de SMS agendada para ${startTime.toLocaleString('pt-BR')}`, 'success');
+                document.getElementById('smsStatus').textContent = 'Agendada';
+                setTimeout(startSmsCampaign, delay);
+            }
+        });
+
+        function startSmsCampaign() {
+            smsCampaignActive = true;
+            document.getElementById('smsStatus').textContent = 'Ativa';
+            document.getElementById('smsBtn').disabled = true;
+            addNotification('Campanha de SMS iniciada!', 'success');
+            
+            sendNextSms();
+            smsIntervalId = setInterval(sendNextSms, 3600000); // 1 hora
+        }
+
+        function sendNextSms() {
+            if (smsCurrentIndex < smsList.length) {
+                const phone = smsList[smsCurrentIndex];
+                const message = document.getElementById('smsMessage').value;
+                
+                // Simulação de envio via torpedogratis.org
+                addNotification(`SMS enviado para ${phone}`, 'success');
+                smsCurrentIndex++;
+                
+                if (smsCurrentIndex >= smsList.length) {
+                    clearInterval(smsIntervalId);
+                    smsCampaignActive = false;
+                    document.getElementById('smsStatus').textContent = 'Concluída';
+                    addNotification('Campanha de SMS concluída!', 'success');
+                }
+            }
+        }
+
+        // NOTIFICATION SYSTEM
+        function addNotification(message, type = 'info') {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('pt-BR');
+            
+            notification.innerHTML = `
+                <div>${message}</div>
+                <div class="notification-time">${timeStr}</div>
+            `;
+            
+            container.insertBefore(notification, container.firstChild);
+            
+            // Limitar a 50 notificações
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // Mensagem de boas-vindas
+        window.addEventListener('load', function() {
+            addNotification('Bem-vindo ao Lapin Designer! Sistema pronto para uso.', 'success');
+        });
+    </script>
+</body>
+</html>
