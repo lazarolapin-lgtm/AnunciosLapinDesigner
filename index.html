@@ -203,18 +203,26 @@
         }
 
         .slideshow-container {
-            max-width: 800px;
             position: relative;
+            max-width: 100%;
             margin: auto;
+            background-color: #0a0a0a;
             border-radius: 10px;
             overflow: hidden;
+            border: 1px solid #333;
         }
 
         .slide {
             display: none;
-            background: #0a0a0a;
-            padding: 60px;
+            width: 100%;
             text-align: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
         }
 
         .slide.active {
@@ -227,10 +235,60 @@
             to { opacity: 1; }
         }
 
-        .slide h4 {
-            font-size: 2em;
-            margin-bottom: 20px;
+        .slide-caption {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
             color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            background-color: rgba(0, 212, 255, 0.7);
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s ease;
+            border-radius: 3px;
+            user-select: none;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 212, 255, 1);
+        }
+
+        .dots {
+            text-align: center;
+            padding: 15px;
+            background: #0a0a0a;
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: #333;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: #00d4ff;
         }
 
         .chat-button {
@@ -382,24 +440,33 @@
             <div class="status" id="smsStatusMsg"></div>
         </div>
 
-        <!-- Seção de Anúncios -->
+        <!-- Seção de Anúncios com Slideshow GIF -->
         <div class="ad-section">
             <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
             <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
             
             <div class="slideshow-container">
                 <div class="slide active">
-                    <h4>Seu Anúncio Aqui</h4>
-                    <p style="color: #aaa;">Entre em contato para anunciar</p>
+                    <img src="https://i.postimg.cc/XqNm5vWg/PLACA-01.png" alt="Seu Anúncio Aqui">
+                    <div class="slide-caption">Seu Anúncio Aqui - Entre em contato!</div>
                 </div>
                 <div class="slide">
-                    <h4>Alcance Milhares de Pessoas</h4>
-                    <p style="color: #aaa;">Apenas R$ 20,00 por mês</p>
+                    <img src="https://i.postimg.cc/dh3PYt1w/PLACA-02.png" alt="Alcance Milhares">
+                    <div class="slide-caption">Alcance Milhares de Pessoas - Apenas R$ 20,00/mês</div>
                 </div>
                 <div class="slide">
-                    <h4>Impulsione seu Negócio</h4>
-                    <p style="color: #aaa;">Publicidade efetiva e acessível</p>
+                    <img src="https://i.postimg.cc/zbrq8Z6T/PLACA-03.png" alt="Impulsione Negócio">
+                    <div class="slide-caption">Impulsione seu Negócio - Publicidade Efetiva</div>
                 </div>
+                
+                <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                <a class="next" onclick="changeSlide(1)">&#10095;</a>
+            </div>
+
+            <div class="dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
             </div>
         </div>
     </div>
@@ -408,23 +475,96 @@
     <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Abrir Chat">
         💬
     </a>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script>
-        // ===== Inicialização EmailJS com verificação =====
-        (function initEmailJS() {
-            try {
-                if (typeof emailjs === 'undefined') {
-                    console.warn('EmailJS não carregado. Verifique o CDN.');
-                    return;
-                }
-                // Use a sua public key do EmailJS (geralmente começa com "public_")
-                emailjs.init('public_V4wGkI6pDTx3_sRN-');
-            } catch (err) {
-                console.error('Erro ao inicializar EmailJS:', err);
-            }
-        })();
 
-        // Variáveis globais
+    <script>
+        // ===== Variável global para controlar EmailJS =====
+        let emailjsReady = false;
+
+        // ===== Carregamento dinâmico do EmailJS =====
+        function loadEmailJS() {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.type = 'text/javascript';
+                
+                script.onload = () => {
+                    setTimeout(() => {
+                        try {
+                            if (typeof emailjs !== 'undefined' && emailjs.init) {
+                                emailjs.init('V4wGkI6pDTx3_sRN-');
+                                emailjsReady = true;
+                                console.log('✓ EmailJS carregado com sucesso');
+                                document.getElementById('emailStatusMsg').textContent = '✓ Sistema pronto para enviar';
+                            } else {
+                                console.warn('EmailJS carregado mas init não disponível');
+                                emailjsReady = false;
+                            }
+                        } catch (err) {
+                            console.error('Erro ao inicializar EmailJS:', err);
+                            emailjsReady = false;
+                        }
+                        resolve();
+                    }, 500);
+                };
+                
+                script.onerror = () => {
+                    console.warn('⚠️ EmailJS CDN indisponível - Sistema em MODO SIMULADO');
+                    emailjsReady = false;
+                    resolve();
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Carregar quando o documento estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadEmailJS);
+        } else {
+            loadEmailJS();
+        }
+
+        // ===== Slideshow GIF CORRIGIDO =====
+        let slideIndex = 1;
+        let slideshowInterval;
+
+        function changeSlide(n) {
+            clearInterval(slideshowInterval);
+            showSlides(slideIndex += n);
+            startAutoslideshow();
+        }
+
+        function currentSlide(n) {
+            clearInterval(slideshowInterval);
+            showSlides(slideIndex = n);
+            startAutoslideshow();
+        }
+
+        function showSlides(n) {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (n > slides.length) { slideIndex = 1; }
+            if (n < 1) { slideIndex = slides.length; }
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (slides[slideIndex - 1]) slides[slideIndex - 1].classList.add('active');
+            if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add('active');
+        }
+
+        function startAutoslideshow() {
+            slideshowInterval = setInterval(() => {
+                slideIndex++;
+                showSlides(slideIndex);
+            }, 4000);
+        }
+
+        showSlides(slideIndex);
+        startAutoslideshow();
+
+        // ===== Variáveis globais =====
         let emailList = [];
         let smsList = [];
         let emailCurrentIndex = 0;
@@ -434,19 +574,7 @@
         let emailCountdown;
         let smsCountdown;
 
-        // Slideshow automático
-        let slideIndex = 0;
-        function showSlides() {
-            const slides = document.querySelectorAll('.slide');
-            slides.forEach(slide => slide.classList.remove('active'));
-            slideIndex++;
-            if (slideIndex > slides.length) slideIndex = 1;
-            if (slides[slideIndex - 1]) slides[slideIndex - 1].classList.add('active');
-            setTimeout(showSlides, 4000);
-        }
-        showSlides();
-
-        // Função para ler arquivo TXT
+        // ===== Leitura de arquivo TXT =====
         document.getElementById('emailFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -460,7 +588,7 @@
             }
         });
 
-        // Função para ler arquivo VCF
+        // ===== Leitura de arquivo VCF =====
         document.getElementById('smsFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -474,12 +602,12 @@
             }
         });
 
-        // Validar e-mail
+        // ===== Validar e-mail =====
         function validateEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        // Parse VCF (simples)
+        // ===== Parse VCF =====
         function parseVCF(vcfContent) {
             const phones = [];
             const lines = vcfContent.split(/\r?\n/);
@@ -493,20 +621,19 @@
             return phones;
         }
 
-        // Mostrar status (agora garante display)
+        // ===== Mostrar Status =====
         function showStatus(elementId, message, type) {
             const statusEl = document.getElementById(elementId);
             if (!statusEl) return;
             statusEl.textContent = message;
             statusEl.className = `status ${type}`;
             statusEl.style.display = 'block';
-            // remover automaticamente depois de alguns segundos
             setTimeout(() => {
                 statusEl.style.display = 'none';
             }, 5000);
         }
 
-        // Countdown timer
+        // ===== Countdown Timer =====
         function startCountdown(type, seconds) {
             let remaining = seconds;
             document.getElementById(`${type}NextSend`).textContent = formatTime(remaining);
@@ -527,7 +654,7 @@
             return `${minutes}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Iniciar campanha de e-mail
+        // ===== Iniciar Campanha de E-mail =====
         document.getElementById('emailBtn').addEventListener('click', function() {
             const subject = document.getElementById('emailSubject').value.trim();
             const content = document.getElementById('emailContent').value.trim();
@@ -551,7 +678,7 @@
                 sendNextEmail(subject, content);
                 emailInterval = setInterval(() => {
                     sendNextEmail(subject, content);
-                }, 240000); // 4 minutos
+                }, 240000);
                 if (emailCountdown) clearInterval(emailCountdown);
                 emailCountdown = startCountdown('email', 240);
             } else {
@@ -559,7 +686,7 @@
             }
         });
 
-        // Enviar próximo e-mail
+        // ===== Enviar Próximo E-mail =====
         function sendNextEmail(subject, content) {
             if (emailCurrentIndex >= emailList.length) {
                 if (emailInterval) clearInterval(emailInterval);
@@ -571,13 +698,12 @@
 
             const email = emailList[emailCurrentIndex];
 
-            if (typeof emailjs === 'undefined' || !emailjs.send) {
-                // fallback: simulação (não envia de verdade)
-                console.warn('emailjs não disponível — envio simulado para', email);
+            if (!emailjsReady || typeof emailjs === 'undefined') {
+                console.warn('EmailJS não disponível - envio simulado para', email);
                 emailCurrentIndex++;
                 document.getElementById('emailSent').textContent = emailCurrentIndex;
                 updateProgress('emailProgressBar', emailCurrentIndex, emailList.length);
-                showStatus('emailStatusMsg', `E-mail simulado para ${email}`, 'info');
+                showStatus('emailStatusMsg', `📧 Simulado: ${email}`, 'info');
                 if (emailCurrentIndex < emailList.length) {
                     if (emailCountdown) clearInterval(emailCountdown);
                     emailCountdown = startCountdown('email', 240);
@@ -585,17 +711,17 @@
                 return;
             }
 
-            // Envio via EmailJS com tratamento de erros
-            emailjs.send('service_bhc7lqg', 'template_6nbbzmr', {
-                to_email: email,
-                subject: subject,
-                message: content
-            }).then(
+            try {
+                emailjs.send('service_bhc7lqg', 'template_6nbbzmr', {
+                    to_email: email,
+                    subject: subject,
+                    message: content
+                }).then(
                 function(response) {
                     emailCurrentIndex++;
                     document.getElementById('emailSent').textContent = emailCurrentIndex;
                     updateProgress('emailProgressBar', emailCurrentIndex, emailList.length);
-                    showStatus('emailStatusMsg', `E-mail enviado para ${email}`, 'success');
+                    showStatus('emailStatusMsg', `✓ E-mail enviado para ${email}`, 'success');
 
                     if (emailCurrentIndex < emailList.length) {
                         if (emailCountdown) clearInterval(emailCountdown);
@@ -604,18 +730,23 @@
                 },
                 function(error) {
                     console.error('Erro EmailJS:', error);
-                    showStatus('emailStatusMsg', `Erro ao enviar para ${email}`, 'error');
+                    showStatus('emailStatusMsg', `✗ Erro ao enviar para ${email}: ${error.text || error.message || 'Erro desconhecido'}`, 'error');
                     emailCurrentIndex++;
                 }
-            );
+                );
+            } catch (err) {
+                console.error('Erro na execução:', err);
+                showStatus('emailStatusMsg', `✗ Erro: ${err.message}`, 'error');
+                emailCurrentIndex++;
+            }
         }
 
-        // Enviar todos os e-mails (atenção: ainda espaçados por 4min para não estourar limites)
+        // ===== Enviar Todos os E-mails =====
         function sendAllEmails(subject, content) {
             emailList.forEach((email, index) => {
                 setTimeout(() => {
                     if (typeof emailjs === 'undefined' || !emailjs.send) {
-                        console.warn('emailjs não disponível — envio simulado para', email);
+                        console.warn('emailjs não disponível - envio simulado para', email);
                         document.getElementById('emailSent').textContent = index + 1;
                         updateProgress('emailProgressBar', index + 1, emailList.length);
                         return;
@@ -635,7 +766,7 @@
             });
         }
 
-        // Iniciar campanha de SMS
+        // ===== Iniciar Campanha de SMS =====
         document.getElementById('smsBtn').addEventListener('click', function() {
             const content = document.getElementById('smsContent').value.trim();
             const autoSend = document.getElementById('smsAuto').checked;
@@ -658,7 +789,7 @@
                 sendNextSMS(content);
                 smsInterval = setInterval(() => {
                     sendNextSMS(content);
-                }, 240000); // 4 minutos
+                }, 240000);
                 if (smsCountdown) clearInterval(smsCountdown);
                 smsCountdown = startCountdown('sms', 240);
             } else {
@@ -666,7 +797,7 @@
             }
         });
 
-        // Enviar próximo SMS (simulação)
+        // ===== Enviar Próximo SMS =====
         function sendNextSMS(content) {
             if (smsCurrentIndex >= smsList.length) {
                 if (smsInterval) clearInterval(smsInterval);
@@ -678,13 +809,12 @@
 
             const phone = smsList[smsCurrentIndex];
 
-            // Simulação de envio via console (para envio real, integre uma API como Twilio/Zenvia)
             console.log(`SMS enviado para ${phone}: ${content}`);
 
             smsCurrentIndex++;
             document.getElementById('smsSent').textContent = smsCurrentIndex;
             updateProgress('smsProgressBar', smsCurrentIndex, smsList.length);
-            showStatus('smsStatusMsg', `SMS enviado para ${phone}`, 'success');
+            showStatus('smsStatusMsg', `✓ SMS enviado para ${phone}`, 'success');
 
             if (smsCurrentIndex < smsList.length) {
                 if (smsCountdown) clearInterval(smsCountdown);
@@ -692,7 +822,7 @@
             }
         }
 
-        // Enviar todos os SMS (simulação)
+        // ===== Enviar Todos os SMS =====
         function sendAllSMS(content) {
             smsList.forEach((phone, index) => {
                 setTimeout(() => {
@@ -703,7 +833,7 @@
             });
         }
 
-        // Atualizar barra de progresso
+        // ===== Atualizar Barra de Progresso =====
         function updateProgress(barId, current, total) {
             const percentage = total === 0 ? 0 : Math.round((current / total) * 100);
             const bar = document.getElementById(barId);
