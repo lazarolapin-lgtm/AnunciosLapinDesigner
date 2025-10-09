@@ -382,27 +382,214 @@
             <div class="status" id="smsStatusMsg"></div>
         </div>
 
-        <!-- Seção de Anúncios -->
-        <div class="ad-section">
-            <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
-            <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
-            
-            <div class="slideshow-container">
-                <div class="slide active">
-                    <h4>Seu Anúncio Aqui</h4>
-                    <p style="color: #aaa;">Entre em contato para anunciar</p>
-                </div>
-                <div class="slide">
-                    <h4>Alcance Milhares de Pessoas</h4>
-                    <p style="color: #aaa;">Apenas R$ 20,00 por mês</p>
-                </div>
-                <div class="slide">
-                    <h4>Impulsione seu Negócio</h4>
-                    <p style="color: #aaa;">Publicidade efetiva e acessível</p>
-                </div>
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anúncios com GIFs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .ad-section {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .ad-section h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .ad-section > p {
+            color: #aaa;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .slideshow-container {
+            position: relative;
+            background-color: #111;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 80%;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .slide h4 {
+            color: #ffd700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .slide p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .dots-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #555;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: #ffd700;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            z-index: 5;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ad-section">
+        <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
+        <p>Anuncie seu negócio aqui!</p>
+        
+        <div class="slideshow-container">
+            <div class="slide active">
+                <img src="https://i.postimg.cc/XqNm5vWg/PLACA-01.png" alt="Anúncio 1">
+                <h4>Seu Anúncio Aqui</h4>
+                <p>Entre em contato para anunciar</p>
+            </div>
+
+            <div class="slide">
+                <img src="https://i.postimg.cc/Dwd21S3J/PLACA-02.png" alt="Anúncio 2">
+                <h4>Alcance Milhares de Pessoas</h4>
+                <p>Apenas R$ 20,00 por mês</p>
+            </div>
+
+            <div class="slide">
+                <img src="https://i.postimg.cc/B68b5JC7/PLACA-03.png" alt="Anúncio 3">
+                <h4>Impulsione seu Negócio</h4>
+                <p>Publicidade efetiva e acessível</p>
+            </div>
+
+            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="next" onclick="changeSlide(1)">&#10095;</button>
+
+            <div class="dots-container">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
             </div>
         </div>
     </div>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            slides[n].classList.add('active');
+            dots[n].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex >= totalSlides) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = totalSlides - 1;
+            showSlide(currentIndex);
+        }
+
+        function currentSlide(n) {
+            currentIndex = n - 1;
+            showSlide(currentIndex);
+        }
+
+        // Auto-avançar slides a cada 5 segundos
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+    </script>
+</body>
+</html>
 
     <!-- Botão de Chat -->
     <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Abrir Chat">
@@ -714,3 +901,4 @@
     </script>
 </body>
 </html>
+
