@@ -525,61 +525,27 @@
 <body>
     <div class="ad-section">
   <!-- Seção de Anúncios -->
-<div class="ad-section" style="text-align: center; color: #fff; background: #111; padding: 20px; border-radius: 12px;">
-    <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
-    <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
-    
-    <div class="slideshow-container" style="position: relative; max-width: 300px; margin: 0 auto;">
-        <!-- Slide 1 -->
-        <div class="slide active">
-            <img src="https://i.postimg.cc/XqNm5vWg/PLACA-01.png" 
-                 alt="Anúncio 1" style="width: 100%; border-radius: 10px;">
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="slide">
-            <img src="https://i.postimg.cc/Dwd21S3J/PLACA-02.png" 
-                 alt="Anúncio 2" style="width: 100%; border-radius: 10px;">
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="slide">
-            <img src="https://i.postimg.cc/B68b5JC7/PLACA-03.png" 
-                 alt="Anúncio 3" style="width: 100%; border-radius: 10px;">
+        <div class="ad-section">
+            <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
+            <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
+            
+            <div class="slideshow-container">
+                <div class="slide active">
+                    <h4>Seu Anúncio Aqui</h4>
+                    <p style="color: #aaa;">Entre em contato para anunciar</p>
+                </div>
+                <div class="slide">
+                    <h4>Alcance Milhares de Pessoas</h4>
+                    <p style="color: #aaa;">Apenas R$ 20,00 por mês</p>
+                </div>
+                <div class="slide">
+                    <h4>Impulsione seu Negócio</h4>
+                    <p style="color: #aaa;">Publicidade efetiva e acessível</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- CSS -->
-<style>
-    .slide {
-        display: none;
-    }
-    .slide.active {
-        display: block;
-        animation: fade 1s;
-    }
-    @keyframes fade {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
-</style>
-
-<!-- JS -->
-<script>
-    let slideIndex = 0;
-    const slides = document.querySelectorAll('.slide');
-
-    function showSlides() {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slideIndex = (slideIndex + 1) % slides.length;
-        slides[slideIndex].classList.add('active');
-    }
-
-    // Exibe o primeiro slide e alterna a cada 4 segundos
-    slides[0].classList.add('active');
-    setInterval(showSlides, 4000);
-</script>
 
 
     <!-- Botão de Chat -->
@@ -892,5 +858,6 @@
     </script>
 </body>
 </html>
+
 
 
