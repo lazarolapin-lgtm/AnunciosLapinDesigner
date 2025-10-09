@@ -524,72 +524,63 @@
 </head>
 <body>
     <div class="ad-section">
-        <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
-        <p>Anuncie seu negócio aqui!</p>
-        
-        <div class="slideshow-container">
-            <div class="slide active">
-                <img src="https://i.postimg.cc/XqNm5vWg/PLACA-01.png" alt="Anúncio 1">
-                <h4>Seu Anúncio Aqui</h4>
-                <p>Entre em contato para anunciar</p>
-            </div>
+  <!-- Seção de Anúncios -->
+<div class="ad-section" style="text-align: center; color: #fff; background: #111; padding: 20px; border-radius: 12px;">
+    <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
+    <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
+    
+    <div class="slideshow-container" style="position: relative; max-width: 300px; margin: 0 auto;">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <img src="https://i.postimg.cc/XqNm5vWg/PLACA-01.png" 
+                 alt="Anúncio 1" style="width: 100%; border-radius: 10px;">
+        </div>
 
-            <div class="slide">
-                <img src="https://i.postimg.cc/Dwd21S3J/PLACA-02.png" alt="Anúncio 2">
-                <h4>Alcance Milhares de Pessoas</h4>
-                <p>Apenas R$ 20,00 por mês</p>
-            </div>
+        <!-- Slide 2 -->
+        <div class="slide">
+            <img src="https://i.postimg.cc/Dwd21S3J/PLACA-02.png" 
+                 alt="Anúncio 2" style="width: 100%; border-radius: 10px;">
+        </div>
 
-            <div class="slide">
-                <img src="https://i.postimg.cc/B68b5JC7/PLACA-03.png" alt="Anúncio 3">
-                <h4>Impulsione seu Negócio</h4>
-                <p>Publicidade efetiva e acessível</p>
-            </div>
-
-            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
-            <button class="next" onclick="changeSlide(1)">&#10095;</button>
-
-            <div class="dots-container">
-                <span class="dot active" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
-            </div>
+        <!-- Slide 3 -->
+        <div class="slide">
+            <img src="https://i.postimg.cc/B68b5JC7/PLACA-03.png" 
+                 alt="Anúncio 3" style="width: 100%; border-radius: 10px;">
         </div>
     </div>
+</div>
 
-    <script>
-        let currentIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        const totalSlides = slides.length;
+<!-- CSS -->
+<style>
+    .slide {
+        display: none;
+    }
+    .slide.active {
+        display: block;
+        animation: fade 1s;
+    }
+    @keyframes fade {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+</style>
 
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
+<!-- JS -->
+<script>
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
 
-            slides[n].classList.add('active');
-            dots[n].classList.add('active');
-        }
+    function showSlides() {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slideIndex = (slideIndex + 1) % slides.length;
+        slides[slideIndex].classList.add('active');
+    }
 
-        function changeSlide(direction) {
-            currentIndex += direction;
-            if (currentIndex >= totalSlides) currentIndex = 0;
-            if (currentIndex < 0) currentIndex = totalSlides - 1;
-            showSlide(currentIndex);
-        }
+    // Exibe o primeiro slide e alterna a cada 4 segundos
+    slides[0].classList.add('active');
+    setInterval(showSlides, 4000);
+</script>
 
-        function currentSlide(n) {
-            currentIndex = n - 1;
-            showSlide(currentIndex);
-        }
-
-        // Auto-avançar slides a cada 5 segundos
-        setInterval(() => {
-            changeSlide(1);
-        }, 5000);
-    </script>
-</body>
-</html>
 
     <!-- Botão de Chat -->
     <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Abrir Chat">
@@ -901,4 +892,5 @@
     </script>
 </body>
 </html>
+
 
