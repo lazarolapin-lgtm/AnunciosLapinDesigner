@@ -583,67 +583,87 @@
   </style>
 </head>
 <body>
-  <h2 style="text-align:center; color: #fff;">Espaço Publicitário (GIFs)</h2>
-  <p style="text-align:center; color: #aaa;">Anuncie seu negócio aqui!</p>
+ <!-- Seção de Anúncios Adaptada para GIF -->
+<div class="ad-section">
+    <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
+    <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
 
-  <div class="slideshow-container">
-    <div class="mySlides fade">
-      <div class="numbertext">1 / 3</div>
-      <img src="https://postimg.cc/FdqT5N7f][img]https://i.postimg.cc/FdqT5N7f/PLACA-01.png
-">
-      <div class="text">Seu Negócio Aqui</div>
+    <div class="slideshow-container">
+
+        <!-- Slides com GIFs -->
+        <div class="mySlides fade">
+            <img src="https://i.postimg.cc/4yH0N4tJ/anuncio1.gif" style="width:100%; border-radius:10px;">
+        </div>
+
+        <div class="mySlides fade">
+            <img src="https://i.postimg.cc/WzYr4K3y/anuncio2.gif" style="width:100%; border-radius:10px;">
+        </div>
+
+        <div class="mySlides fade">
+            <img src="https://i.postimg.cc/kX9xS5rM/anuncio3.gif" style="width:100%; border-radius:10px;">
+        </div>
+
     </div>
+    <br>
 
-    <div class="mySlides fade">
-      <div class="numbertext">2 / 3</div>
-      <img src="  https://postimg.cc/dh3PYt1w][img]https://i.postimg.cc/dh3PYt1w/PLACA-02.png">
-      <div class="text">Alcance Mais Pessoas</div>
+    <!-- Pontos de navegação -->
+    <div style="text-align:center">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
     </div>
+</div>
 
-    <div class="mySlides fade">
-      <div class="numbertext">3 / 3</div>
-      <img src="     https://postimg.cc/zbrq8Z6T][img]https://i.postimg.cc/zbrq8Z6T/PLACA-03.png">
-      <div class="text">Impulsione Sua Marca</div>
-    </div>
-  </div>
-  <br>
+<style>
+.mySlides {display: none;}
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 3px;
+  background-color: #333;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+.active-dot {
+  background-color: #00d4ff;
+}
+</style>
 
-  <div style="text-align:center;">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
+<script>
+// Slideshow automático de GIFs
+let slideIndex = 0;
+showSlidesGIF();
 
-  <script>
-    let slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-      let i;
-      let slides = document.getElementsByClassName("mySlides");
-      let dots = document.getElementsByClassName("dot");
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) {
-        slideIndex = 1;
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-      }
-      slides[slideIndex - 1].style.display = "block";
-      dots[slideIndex - 1].className += " active";
-      setTimeout(showSlides, 4000); // muda de slide a cada 4s
-    }
-  </script>
-</body>
-</html>
+function showSlidesGIF() {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active-dot", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active-dot";
+  setTimeout(showSlidesGIF, 4000); // troca a cada 4 segundos
+}
+</script>
 
 
 
-
-    <!-- Botão de Chat -->
+   <!-- Botão de Chat -->
     <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Abrir Chat">
         💬
     </a>
@@ -953,6 +973,7 @@
     </script>
 </body>
 </html>
+
 
 
 
