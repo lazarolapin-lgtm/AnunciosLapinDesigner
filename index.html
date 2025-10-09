@@ -382,288 +382,29 @@
             <div class="status" id="smsStatusMsg"></div>
         </div>
 
-    <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anúncios com GIFs</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #1a1a1a;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        .ad-section {
-            background-color: #222;
-            border-radius: 8px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .ad-section h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .ad-section > p {
-            color: #aaa;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .slideshow-container {
-            position: relative;
-            background-color: #111;
-            border-radius: 6px;
-            overflow: hidden;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slide {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .slide.active {
-            display: flex;
-            opacity: 1;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .slide img {
-            max-width: 100%;
-            max-height: 80%;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-
-        .slide h4 {
-            color: #ffd700;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .slide p {
-            color: #aaa;
-            font-size: 14px;
-        }
-
-        .dots-container {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #555;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .dot.active {
-            background-color: #ffd700;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 18px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            z-index: 5;
-        }
-
-        .prev:hover, .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .prev {
-            left: 10px;
-        }
-
-        .next {
-            right: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="ad-section">
-  <!-- Seção de Anúncios -->
+        <!-- Seção de Anúncios -->
         <div class="ad-section">
-       <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: Verdana, sans-serif; background: #111; color: #fff; }
-    .mySlides { display: none; }
-    img { vertical-align: middle; width: 100%; border-radius: 10px; }
-    .slideshow-container {
-      max-width: 600px;
-      position: relative;
-      margin: auto;
-    }
-    .text {
-      color: #f2f2f2;
-      font-size: 15px;
-      padding: 8px 12px;
-      position: absolute;
-      bottom: 8px;
-      width: 100%;
-      text-align: center;
-      text-shadow: 1px 1px 4px #000;
-    }
-    .numbertext {
-      color: #f2f2f2;
-      font-size: 12px;
-      padding: 8px 12px;
-      position: absolute;
-      top: 0;
-    }
-    .dot {
-      height: 15px;
-      width: 15px;
-      margin: 0 2px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.6s ease;
-    }
-    .dot.active {
-      background-color: #717171;
-    }
-    .fade {
-      animation-name: fade;
-      animation-duration: 1.5s;
-    }
-    @keyframes fade {
-      from { opacity: .4; }
-      to { opacity: 1; }
-    }
-    @media only screen and (max-width: 300px) {
-      .text { font-size: 11px; }
-    }
-  </style>
-</head>
-<body>
- <!-- Seção de Anúncios Adaptada para GIF -->
-<div class="ad-section">
-    <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
-    <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
-
-    <div class="slideshow-container">
-
-        <!-- Slides com GIFs -->
-        <div class="mySlides fade">
-            <img src="https://i.postimg.cc/4yH0N4tJ/anuncio1.gif" style="width:100%; border-radius:10px;">
+            <h3>🎯 Espaço Publicitário - R$ 20,00/mês</h3>
+            <p style="color: #aaa; margin-bottom: 20px;">Anuncie seu negócio aqui!</p>
+            
+            <div class="slideshow-container">
+                <div class="slide active">
+                    <h4>Seu Anúncio Aqui</h4>
+                    <p style="color: #aaa;">Entre em contato para anunciar</p>
+                </div>
+                <div class="slide">
+                    <h4>Alcance Milhares de Pessoas</h4>
+                    <p style="color: #aaa;">Apenas R$ 20,00 por mês</p>
+                </div>
+                <div class="slide">
+                    <h4>Impulsione seu Negócio</h4>
+                    <p style="color: #aaa;">Publicidade efetiva e acessível</p>
+                </div>
+            </div>
         </div>
-
-        <div class="mySlides fade">
-            <img src="https://i.postimg.cc/WzYr4K3y/anuncio2.gif" style="width:100%; border-radius:10px;">
-        </div>
-
-        <div class="mySlides fade">
-            <img src="https://i.postimg.cc/kX9xS5rM/anuncio3.gif" style="width:100%; border-radius:10px;">
-        </div>
-
     </div>
-    <br>
 
-    <!-- Pontos de navegação -->
-    <div style="text-align:center">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
-</div>
-
-<style>
-.mySlides {display: none;}
-.fade {
-  animation-name: fade;
-  animation-duration: 1.5s;
-}
-@keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
-}
-.dot {
-  height: 12px;
-  width: 12px;
-  margin: 0 3px;
-  background-color: #333;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-}
-.active-dot {
-  background-color: #00d4ff;
-}
-</style>
-
-<script>
-// Slideshow automático de GIFs
-let slideIndex = 0;
-showSlidesGIF();
-
-function showSlidesGIF() {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active-dot", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active-dot";
-  setTimeout(showSlidesGIF, 4000); // troca a cada 4 segundos
-}
-</script>
-
-
-
-   <!-- Botão de Chat -->
+    <!-- Botão de Chat -->
     <a href="https://mail.google.com/chat/u/0/#chat/space/AAQAw8LgJEw" target="_blank" class="chat-button" title="Abrir Chat">
         💬
     </a>
@@ -973,8 +714,3 @@ function showSlidesGIF() {
     </script>
 </body>
 </html>
-
-
-
-
-
