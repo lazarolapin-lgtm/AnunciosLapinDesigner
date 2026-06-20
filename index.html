@@ -544,7 +544,7 @@ function loadEmailJS() {
       setTimeout(() => {
         try {
           if (typeof emailjs !== 'undefined' && emailjs.init) {
-            emailjs.init('PtDv7FYIq6pegeaPu');
+            emailjs.init('V4wGkI6pDTx3_sRN-');
             emailjsReady = true;
             console.log('✓ EmailJS carregado com sucesso');
             updateEmailJSNote(true);
@@ -828,28 +828,11 @@ function startTimer() {
 const DEST_EMAIL = 'lazarolapin@gmail.com';
 
 function buildMissionMessage(mission) {
-  return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  LOGOTRAINER — MISSÃO DE DESIGN
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📌 BRIEFING: ${mission.title}
-
-🎨 ESTILO: ${mission.style}
-🖌️ PALETA DE CORES: ${mission.palette}
-📐 FORMATO: ${mission.formato}
-💡 DICA: ${mission.extra}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PRAZO: Você tem até a próxima missão (4 horas)
-Foco total. Sem desculpa. Só resultado.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Enviado por LogoTrainer · ${new Date().toLocaleString('pt-BR')}`;
+  return `Missão: ${mission.title} | Estilo: ${mission.style} | Paleta: ${mission.palette} | Formato: ${mission.formato} | Dica: ${mission.extra} | Prazo: 4h | Enviado: ${new Date().toLocaleString('pt-BR')}`;
 }
 
 function sendEmail(mission, isFirst) {
-  const subject = `🎯 LogoTrainer — Nova Missão: ${mission.title}`;
-  const message = buildMissionMessage(mission);
+  const detalhes = buildMissionMessage(mission);
 
   // Modo simulado: CDN do EmailJS indisponível ou ainda não inicializado
   if (!emailjsReady || typeof emailjs === 'undefined') {
@@ -859,10 +842,11 @@ function sendEmail(mission, isFirst) {
     return;
   }
 
-  emailjs.send('service_y08vbms', 'template_6nbbzmr', {
-    to_email: DEST_EMAIL,
-    subject: subject,
-    message: message
+  emailjs.send('service_y08vbms', 'template_9szm0bp', {
+    email: DEST_EMAIL,
+    from_name: 'LogoTrainer',
+    name: 'Designer',
+    title: detalhes
   }).then(
     function(response) {
       addLog(`✓ E-mail enviado para ${DEST_EMAIL}: "${mission.title}"`, 'success');
@@ -873,6 +857,7 @@ function sendEmail(mission, isFirst) {
       addLog(`✗ Falha ao enviar "${mission.title}": ${error.text || error.message || 'erro desconhecido'}`, 'warn');
       showToast('✗ Falha ao enviar e-mail', true);
     }
+
   );
 }
 
